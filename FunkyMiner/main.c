@@ -18,6 +18,13 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	int i; for (i = 0; i < INSTANCE_SIZE; i++) {
+		if(!isalpha(argv[1][i]) && !isdigit(argv[1][i])) {
+			printf("Invalid characters in the instance code\n");
+			return 1;
+		}
+	}
+
 	srand((unsigned int)time(0));
 	int threads = atoi(argv[2]);
 	if (!threads) {
@@ -29,8 +36,8 @@ int main(int argc, char *argv[])
 		MinersCrew crew;
 		create_crew(&crew, threads, argv[1]);
 
-		while (!crew.powerdown) {
-			sleep(1000);
+		while (crew.result == NULL) {
+			go_sleep(1000);
 			double hashes = 0;
 			unsigned register int i;
 			for (i = 0; i < crew.count; ++i) {
@@ -41,35 +48,20 @@ int main(int argc, char *argv[])
 				printf("> %d Hash/s\n", (int)hashes);
 			}
 			else {
-				printf("> %.2ff MHash/s\n", hashes / 1000000.0f);
+				printf("> %.2f MHash/s\n", hashes / 1000000.0f);
 			}
 		}
 
 		printf("\nAccepted!\n\n");
-		char *code = NULL;
-		unsigned register int i;
-		for (i = 0; i < crew.count; ++i) {
-			if (crew.miners[i]->success) {
-				code = crew.miners[i]->data;
-				break;
-			}
-		}
-
-		if (code == NULL) {
-			printf("BUG: Mining crew terminated, but no successor was found.\n");
-			destroy_crew(&crew);
-			return 1;
-		}
-
 		FILE *f = fopen(argv[3], "a");
 		if (f == NULL) {
 			printf("ERROR: Can't open nor create destination file, interrupting.\n");
-			printf("The last mined code was %s.\n", code);
+			printf("The last mined code was %s.\n", crew.result);
 			destroy_crew(&crew);
 			return 1;
 		}
 
-		fprintf(f, "%s\n", code);
+		fprintf(f, "%s\n", crew.result);
 		fclose(f);
 		destroy_crew(&crew);
 	}

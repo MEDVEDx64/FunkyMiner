@@ -16,3 +16,5 @@ Release
 *.cso
 *.csproj.user
 *.aps
+*.o
+funkyminer
