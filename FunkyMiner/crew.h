@@ -1,6 +1,6 @@
 #pragma once
 
-#define DIFF 6
+#define DIFF 4
 #define INSTANCE_SIZE 6
 
 typedef struct {
@@ -10,7 +10,6 @@ typedef struct {
 	unsigned short data_length;
 	unsigned int nonce_size;
 	unsigned long long counter;
-	int success;
 } Miner;
 
 typedef struct {

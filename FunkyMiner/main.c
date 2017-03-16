@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 			unsigned register int i;
 			for (i = 0; i < crew.count; ++i) {
 				hashes += crew.miners[i]->counter;
+				crew.miners[i]->counter = 0;
 			}
 
 			if (hashes < 10000) {
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
 			}
 		}
 
-		printf("\nAccepted!\n\n");
+		printf("~ Accepted!\n");
 		FILE *f = fopen(argv[3], "a");
 		if (f == NULL) {
 			printf("ERROR: Can't open nor create destination file, interrupting.\n");

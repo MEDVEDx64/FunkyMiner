@@ -10,7 +10,7 @@ struct MinerData {
 };
 
 char get_random_char() {
-	char c = rand() % 37 + 87;
+	char c = rand() % 36 + 87;
 	return (c < 'a' ? (c - 39) : c);
 }
 
@@ -22,9 +22,20 @@ void feed_initial(Miner *miner) {
 }
 
 void feed_next(Miner *miner) {
-	register int i;
-	for (i = 0; i < 4; ++i) {
-		miner->nonce[rand() % miner->nonce_size] = get_random_char();
+	unsigned register int i;
+	for (i = 0; i < miner->nonce_size; ++i) {
+		miner->nonce[i]++;
+		if (miner->nonce[i] == ':') {
+			miner->nonce[i] = 'a';
+			break;
+		}
+
+		if (miner->nonce[i] == '{') {
+			miner->nonce[i] = '0';
+			continue;
+		}
+
+		break;
 	}
 }
 
@@ -60,6 +71,7 @@ void create_crew(MinersCrew *crew, unsigned int count, const char *instance) {
 		miner->nonce_size = GET_NONCE_SIZE();
 
 		miner->data = malloc(43); // Max possible FunkyStore's MagicFSC1 voucher code length + zero byte
+		memset(miner->data, 0, 43);
 		miner->nonce = (char*)((long)miner->data + 10 + INSTANCE_SIZE);
 		miner->data_length = 10 + INSTANCE_SIZE + miner->nonce_size;
 		miner->hash = malloc(SHA256_DIGEST_LENGTH);
@@ -84,5 +96,4 @@ void destroy_crew(MinersCrew *crew) {
 
 	free(crew->miners);
 	free(crew->zeroes);
-	free(crew);
 }
