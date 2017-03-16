@@ -41,6 +41,7 @@ void feed_next(Miner *miner) {
 
 void miner_thread(struct MinerData *data) {
 	Miner *miner = data->miner;
+	int *hash = (int*)miner->hash;
 	while(data->crew->result == NULL) {
 		feed_next(miner);
 
@@ -50,7 +51,7 @@ void miner_thread(struct MinerData *data) {
 		SHA256_Final(miner->hash, &ctx);
 
 		++miner->counter;
-		if(!memcmp(miner->hash, data->crew->zeroes, DIFF)) {
+		if(!(*hash)) {
 			data->crew->result = miner->data;
 		}
 	}
@@ -61,8 +62,6 @@ void miner_thread(struct MinerData *data) {
 void create_crew(MinersCrew *crew, unsigned int count, const char *instance) {
 	memset(crew, 0, sizeof(MinersCrew));
 	crew->miners = malloc(sizeof(void*) * count);
-	crew->zeroes = malloc(SHA256_DIGEST_LENGTH);
-	memset(crew->zeroes, 0, SHA256_DIGEST_LENGTH);
 	crew->count = count;
 
 	unsigned int i; for (i = 0; i < count; i++) {
@@ -95,5 +94,4 @@ void destroy_crew(MinersCrew *crew) {
 	}
 
 	free(crew->miners);
-	free(crew->zeroes);
 }

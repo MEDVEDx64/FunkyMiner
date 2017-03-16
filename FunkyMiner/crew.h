@@ -1,6 +1,5 @@
 #pragma once
 
-#define DIFF 4
 #define INSTANCE_SIZE 6
 
 typedef struct {
@@ -16,7 +15,6 @@ typedef struct {
 	char *result;
 	unsigned int count;
 	Miner **miners;
-	void *zeroes;
 } MinersCrew;
 
 void create_crew(MinersCrew *crew, unsigned int count, const char *instance);
