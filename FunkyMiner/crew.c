@@ -1,4 +1,5 @@
 #include "crew.h"
+#include "threading.h"
 #include "stdafx.h"
 
 #define GET_NONCE_SIZE() (rand() % 8 + 18)
