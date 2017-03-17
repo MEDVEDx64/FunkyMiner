@@ -3,12 +3,12 @@
 #include "stdafx.h"
 
 void print_help(const char *arg0) {
-	printf("Usage: %s <instance code> <threads> <output file>\n", arg0);
+	printf("Usage: %s <instance code> <threads> [output file]\n", arg0);
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc < 4) {
+	if (argc < 3) {
 		print_help(argv[0]);
 		return 0;
 	}
@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	char *out_file = argc == 3 ? "out.txt" : argv[3];
 	srand((unsigned int)time(0));
 	int threads = atoi(argv[2]);
 	if (!threads) {
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 		}
 
 		printf("~ Accepted!\n");
-		FILE *f = fopen(argv[3], "a");
+		FILE *f = fopen(out_file, "a");
 		if (f == NULL) {
 			printf("ERROR: Can't open nor create destination file, interrupting.\n");
 			printf("The last mined code was %s.\n", crew.result);
