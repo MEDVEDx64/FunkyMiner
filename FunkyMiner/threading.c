@@ -40,11 +40,11 @@ void make_thread(void(*routine)(void*), void *arg) {
 	struct ThrData *data = malloc(sizeof(struct ThrData));
 	data->routine = routine;
 	data->arg = arg;
-	pthread_create(&thread, NULL, thrproc, arg);
+	pthread_create(&thread, NULL, thrproc, data);
 }
 
 void go_sleep(unsigned int millis) {
-	sleep(millis * 1000);
+	usleep(millis * 1000);
 }
 
 #endif

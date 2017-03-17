@@ -80,7 +80,7 @@ void create_crew(MinersCrew *crew, unsigned int count, const char *instance) {
 		struct MinerData *data = malloc(sizeof(struct MinerData));
 		data->miner = miner;
 		data->crew = crew;
-		make_thread(miner_thread, data);
+		make_thread((void (*)(void*))miner_thread, data);
 		crew->miners[i] = miner;
 	}
 }
