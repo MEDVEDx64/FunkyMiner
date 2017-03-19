@@ -10,7 +10,9 @@ struct MinerData {
 };
 
 char get_random_char() {
-	char c = rand() % 36 + 87;
+	unsigned char r = 0;
+	RAND_bytes(&r, 1);
+	char c = r % 36 + 87;
 	return (c < 'a' ? (c - 39) : c);
 }
 
