@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include <openssl/sha.h>
+#include <openssl/rand.h>
 
 #ifdef _WIN32
 

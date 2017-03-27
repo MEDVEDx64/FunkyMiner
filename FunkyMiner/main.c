@@ -26,8 +26,10 @@ int main(int argc, char *argv[])
 	}
 
 	char *out_file = argc == 3 ? "out.txt" : argv[3];
-	int t = (int)time(NULL) ^ (int)clock();
-	RAND_seed(&t, sizeof(int));
+	time_t t = time(NULL);
+	clock_t c = clock();
+	RAND_seed(&t, sizeof(time_t));
+	RAND_seed(&c, sizeof(clock_t));
 	int threads = atoi(argv[2]);
 	if (!threads) {
 		printf("Threads count cannot be zero\n");
